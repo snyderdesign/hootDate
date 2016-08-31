@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  {% load staticfiles %}
+  <link rel="stylesheet" href="{% static 'css/da_styles.css' %}">
+  <link href='https://fonts.googleapis.com/css?family=Montserrat:700' rel='stylesheet' type='text/css'>
+  <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="boxOne">
+      <div id="hoot_logo"><img src="{% static 'image/hootdate.jpg' %}"></div>
+      <div class="topText"><div class="vcenter">Welcome, {{ user.first_name }}!</div></div>
+      <form class="" action="{% url 'rl_reset' %}" method="post">
+      {% csrf_token %}
+        <input class="head" type='submit' value='Logout'>
+      </form>
+      {% if user.gender != 1 %}<div class="linkbuddy">
+      <a name='home-button' href="{% url 'da_home'%}">Home</a></div>
+      {% endif %}
+    </div>
+    <fieldset>
+      <form action="{% url 'da_q_submit' %}" method="post">
+      {% csrf_token %}
+      <legend>Questionnaire</legend>
+      <p>Plese answer the following questions</p>
+      {% for question in questions %}
+      <label>{{question.id}}. {{question.question}}</label><br>
+        {% if question.image %}
+          <img src='{% static "image/triangles.png" %}' width="200" height="200" />
+          <br>
+        {% endif %}
+        <input type="radio" name="{{question.id}}" value="option_a">{{question.option_a}}</input>
+        <input type="radio" name="{{question.id}}" value="option_b">{{question.option_b}}</input>
+        <input type="radio" name="{{question.id}}" value="option_c">{{question.option_c}}</input>
+        <input type="radio" name="{{question.id}}" value="option_d">{{question.option_d}}</input>
+        <br>
+        <p class='dropdown'>Importance:</p>
+        <select name='importance-{{question.id}}'>
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select><br>
+      {% endfor %}
+      <input type="submit" value="Submit your answers" name="">
+      </form>
+    </fieldset>
+  </div>
+</body>
+</html>
